@@ -24,6 +24,7 @@
 /* USER CODE BEGIN Includes */
 #include <string.h>
 #include <stdio.h>
+#include <general.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -56,10 +57,10 @@ osThreadId_t blink02Handle;
 const osThreadAttr_t blink02_attributes = {
   .name = "blink02",
   .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityBelowNormal,
+  .priority = (osPriority_t) osPriorityLow,
 };
 /* USER CODE BEGIN PV */
-char text[256];
+extern char text[256];
 
 /* USER CODE END PV */
 
@@ -76,12 +77,7 @@ void StartBlink02(void *argument);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-void serialPrint(char *msg){
-	char buffer[1024];
-	snprintf(buffer, sizeof(buffer), "%s\r\n", msg);
-	HAL_UART_Transmit(&huart2, (uint8_t *)buffer, strlen(buffer), 1000);
-	memset(text,0,sizeof(text));
-}
+
 
 /* USER CODE END 0 */
 
@@ -307,9 +303,13 @@ void StartBlink01(void *argument)
   /* Infinite loop */
   for(;;)
   {
-	  //serialPrint("Blink01");
-	  HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-	  osDelay(500);
+	  serialPrint("Blink01");
+//	  for (int x = 0; x <5; x++){
+//		  sprintf(text, "count task1 : %d", x);
+//		  serialPrint(text);
+//		  osDelay(1000);
+//	  }
+	  osDelay(1000);
   }
 
   osThreadTerminate(NULL);
@@ -329,9 +329,13 @@ void StartBlink02(void *argument)
   /* Infinite loop */
   for(;;)
   {
-	  //serialPrint("Blink02");
-	  HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-	  osDelay(600);
+	  serialPrint("Blink02");
+//	  for (int x = 0; x <3; x++){
+//		  sprintf(text, "count task2 : %d", x);
+//		  serialPrint(text);
+//		  osDelay(2000);
+//	  }
+	  osDelay(2000);
   }
   osThreadTerminate(NULL);
   /* USER CODE END StartBlink02 */
