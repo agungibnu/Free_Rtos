@@ -49,18 +49,19 @@ UART_HandleTypeDef huart2;
 osThreadId_t blink01Handle;
 const osThreadAttr_t blink01_attributes = {
   .name = "blink01",
-  .stack_size = 128 * 4,
+  .stack_size = 256 * 4,
   .priority = (osPriority_t) osPriorityNormal,
 };
 /* Definitions for blink02 */
 osThreadId_t blink02Handle;
 const osThreadAttr_t blink02_attributes = {
   .name = "blink02",
-  .stack_size = 128 * 4,
+  .stack_size = 256 * 4,
   .priority = (osPriority_t) osPriorityLow,
 };
 /* USER CODE BEGIN PV */
-extern char text[256];
+
+
 
 /* USER CODE END PV */
 
@@ -304,11 +305,14 @@ void StartBlink01(void *argument)
   for(;;)
   {
 	  serialPrint("Blink01");
-//	  for (int x = 0; x <5; x++){
-//		  sprintf(text, "count task1 : %d", x);
-//		  serialPrint(text);
-//		  osDelay(1000);
-//	  }
+
+	  for (int x = 0; x <5; x++){
+		  static char text[128];
+
+		  sprintf(text, "count task1 : %d", x);
+		  serialPrint(text);
+		  //HAL_Delay(1000);
+	  }
 	  osDelay(1000);
   }
 
@@ -330,11 +334,12 @@ void StartBlink02(void *argument)
   for(;;)
   {
 	  serialPrint("Blink02");
-//	  for (int x = 0; x <3; x++){
-//		  sprintf(text, "count task2 : %d", x);
-//		  serialPrint(text);
-//		  osDelay(2000);
-//	  }
+	  for (int x = 0; x <3; x++){
+		  static char text[128];
+		  sprintf(text, "count task2 : %d", x);
+		  serialPrint(text);
+		  //HAL_Delay(1000);
+	  }
 	  osDelay(2000);
   }
   osThreadTerminate(NULL);

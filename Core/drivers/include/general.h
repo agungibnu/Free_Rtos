@@ -7,7 +7,8 @@
 
 #ifndef DRIVERS_INCLUDE_GENERAL_H_
 #define DRIVERS_INCLUDE_GENERAL_H_
-extern char text[256];
-void serialPrint(char *msg);
+
+
 
 #endif /* DRIVERS_INCLUDE_GENERAL_H_ */
+void serialPrint(char *msg);
