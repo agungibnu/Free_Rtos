@@ -45,18 +45,18 @@
 /* Private variables ---------------------------------------------------------*/
 UART_HandleTypeDef huart2;
 
-/* Definitions for blink01 */
-osThreadId_t blink01Handle;
-const osThreadAttr_t blink01_attributes = {
-  .name = "blink01",
-  .stack_size = 256 * 4,
+/* Definitions for task01 */
+osThreadId_t task01Handle;
+const osThreadAttr_t task01_attributes = {
+  .name = "task01",
+  .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityNormal,
 };
-/* Definitions for blink02 */
-osThreadId_t blink02Handle;
-const osThreadAttr_t blink02_attributes = {
-  .name = "blink02",
-  .stack_size = 256 * 4,
+/* Definitions for task02 */
+osThreadId_t task02Handle;
+const osThreadAttr_t task02_attributes = {
+  .name = "task02",
+  .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityLow,
 };
 /* USER CODE BEGIN PV */
@@ -69,8 +69,8 @@ const osThreadAttr_t blink02_attributes = {
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_USART2_UART_Init(void);
-void StartBlink01(void *argument);
-void StartBlink02(void *argument);
+void StartTask01(void *argument);
+void StartTask02(void *argument);
 
 /* USER CODE BEGIN PFP */
 
@@ -136,11 +136,11 @@ int main(void)
   /* USER CODE END RTOS_QUEUES */
 
   /* Create the thread(s) */
-  /* creation of blink01 */
-  blink01Handle = osThreadNew(StartBlink01, NULL, &blink01_attributes);
+  /* creation of task01 */
+  task01Handle = osThreadNew(StartTask01, NULL, &task01_attributes);
 
-  /* creation of blink02 */
-  blink02Handle = osThreadNew(StartBlink02, NULL, &blink02_attributes);
+  /* creation of task02 */
+  task02Handle = osThreadNew(StartTask02, NULL, &task02_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -291,59 +291,58 @@ static void MX_GPIO_Init(void)
 
 /* USER CODE END 4 */
 
-/* USER CODE BEGIN Header_StartBlink01 */
+/* USER CODE BEGIN Header_StartTask01 */
 /**
-  * @brief  Function implementing the blink01 thread.
+  * @brief  Function implementing the task01 thread.
   * @param  argument: Not used
   * @retval None
   */
-/* USER CODE END Header_StartBlink01 */
-void StartBlink01(void *argument)
+/* USER CODE END Header_StartTask01 */
+void StartTask01(void *argument)
 {
   /* USER CODE BEGIN 5 */
   /* Infinite loop */
   for(;;)
   {
-	  serialPrint("Blink01");
+	  serialPrint("Task01");
 
 	  for (int x = 0; x <5; x++){
 		  static char text[128];
-
 		  sprintf(text, "count task1 : %d", x);
 		  serialPrint(text);
-		  //HAL_Delay(1000);
+		  osDelay(500);
 	  }
 	  osDelay(1000);
   }
-
   osThreadTerminate(NULL);
   /* USER CODE END 5 */
 }
 
-/* USER CODE BEGIN Header_StartBlink02 */
+/* USER CODE BEGIN Header_StartTask02 */
 /**
-* @brief Function implementing the blink02 thread.
+* @brief Function implementing the task02 thread.
 * @param argument: Not used
 * @retval None
 */
-/* USER CODE END Header_StartBlink02 */
-void StartBlink02(void *argument)
+/* USER CODE END Header_StartTask02 */
+void StartTask02(void *argument)
 {
-  /* USER CODE BEGIN StartBlink02 */
+  /* USER CODE BEGIN StartTask02 */
   /* Infinite loop */
   for(;;)
   {
-	  serialPrint("Blink02");
+	  serialPrint("Task02");
+
 	  for (int x = 0; x <3; x++){
 		  static char text[128];
 		  sprintf(text, "count task2 : %d", x);
 		  serialPrint(text);
-		  //HAL_Delay(1000);
+		  osDelay(500);
 	  }
-	  osDelay(2000);
+	  osDelay(1000);
   }
   osThreadTerminate(NULL);
-  /* USER CODE END StartBlink02 */
+  /* USER CODE END StartTask02 */
 }
 
 /**
